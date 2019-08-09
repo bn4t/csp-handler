@@ -19,16 +19,15 @@ func initMailClient() {
 
 	servername = os.Getenv("SMTP_ADDRESS")
 	host, _, _ := net.SplitHostPort(servername)
-	auth := smtp.PlainAuth("",os.Getenv("SMTP_USERNAME"), os.Getenv("SMTP_PASSWORD"), host)
+	auth := smtp.PlainAuth("", os.Getenv("SMTP_USERNAME"), os.Getenv("SMTP_PASSWORD"), host)
 
 	// TLS config
-	tlsconfig := &tls.Config {
+	tlsconfig := &tls.Config{
 		InsecureSkipVerify: false,
-		ServerName: host,
+		ServerName:         host,
 	}
 
-
-	// Here is the key, you need to call tls.Dial instead of smtp.Dial
+	// Here is the key, we need to call tls.Dial instead of smtp.Dial
 	// for smtp servers running on 465 that require an ssl connection
 	// from the very beginning (no starttls)
 	conn, err := tls.Dial("tcp", servername, tlsconfig)
@@ -50,11 +49,10 @@ func initMailClient() {
 
 func sendCSPMail(domain string, documentUri string, referrer string, violatedDirective string, originalPolicy string, blockedUri string) {
 	from := mail.Address{Name: "CSP-Handler", Address: os.Getenv("SENDER_EMAIL")}
-	to   := mail.Address{Name: "CSP-Handler", Address: os.Getenv("RECEIVER_EMAIL")}
+	to := mail.Address{Name: "CSP-Handler", Address: os.Getenv("RECEIVER_EMAIL")}
 	subj := "CSP violation for " + domain
 	body := "A CSP violation occurred for " + domain + " at " + documentUri + "\n\n**Additional info:** \nReferrer: " + referrer + "\nViolated directive: " + violatedDirective +
 		"\nOriginal policy: " + originalPolicy + "\nBlocked URI: " + blockedUri + "\n\nThis violation happened at " + time.Now().UTC().Format("2 Jan 2006 15:04:05") + " UTC."
-
 
 	// Setup headers
 	headers := make(map[string]string)
@@ -67,7 +65,7 @@ func sendCSPMail(domain string, documentUri string, referrer string, violatedDir
 
 	// Setup message
 	message := ""
-	for k,v := range headers {
+	for k, v := range headers {
 		message += fmt.Sprintf("%s: %s\r\n", k, v)
 	}
 	message += "\r\n" + base64.StdEncoding.EncodeToString([]byte(body))

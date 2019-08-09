@@ -8,8 +8,6 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-
-
 func main() {
 
 	// load in .env file if it exists
@@ -25,6 +23,9 @@ func main() {
 	// initialize the mail client
 	initMailClient()
 
+	// initialize cron
+	initCron()
+
 	e := echo.New()
 
 	e.POST("/report-uri/:domain", handleReport)
@@ -33,8 +34,4 @@ func main() {
 	})
 
 	e.Logger.Fatal(e.Start(":8080"))
-
-	println("CSP-Handler successfully initialized")
 }
-
-
