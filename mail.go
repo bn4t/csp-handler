@@ -22,7 +22,7 @@ func initMailClient() {
 	auth := smtp.PlainAuth("", os.Getenv("SMTP_USERNAME"), os.Getenv("SMTP_PASSWORD"), host)
 
 	// TLS config
-	tlsconfig := &tls.Config{
+	tlsConfig := &tls.Config{
 		InsecureSkipVerify: false,
 		ServerName:         host,
 	}
@@ -30,7 +30,7 @@ func initMailClient() {
 	// Here is the key, we need to call tls.Dial instead of smtp.Dial
 	// for smtp servers running on 465 that require an ssl connection
 	// from the very beginning (no starttls)
-	conn, err := tls.Dial("tcp", servername, tlsconfig)
+	conn, err := tls.Dial("tcp", servername, tlsConfig)
 	if err != nil {
 		log.Fatal(err)
 	}

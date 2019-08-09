@@ -18,7 +18,7 @@ type CSPJson struct {
 	} `json:"csp-report"`
 }
 
-var RateLimitMap map[string]int = make(map[string]int)
+var RateLimitMap = make(map[string]int)
 
 func handleReport(c echo.Context) error {
 	domain := c.Param("domain")
