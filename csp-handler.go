@@ -78,8 +78,7 @@ func handleReport(c echo.Context) error {
 		return c.String(500, "Internal server error")
 	}
 
-	// send mail in new goroutine so the http response is quicker
-	go sendCSPMail(domain, cspReportJson.CspReport.DocumentURI, cspReportJson.CspReport.Referrer, cspReportJson.CspReport.ViolatedDirective,
+	sendCSPMail(domain, cspReportJson.CspReport.DocumentURI, cspReportJson.CspReport.Referrer, cspReportJson.CspReport.ViolatedDirective,
 		cspReportJson.CspReport.OriginalPolicy, cspReportJson.CspReport.BlockedURI)
 
 	return c.NoContent(204)
