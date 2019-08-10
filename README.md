@@ -15,6 +15,12 @@
 2. Edit the environment variables in `docker-compose.yml`
 3. Build the image and start the container: `docker-compose up --build -d`
 
+## Usage
+Include the `report-uri` directive in your content security policy:
+
+`report-uri https://csp-report.example.com/report-uri/mydomain.com`
+
+Replace `mydomain.com` with the domain on which this content security policy is deployed.
 
 ## License
 
