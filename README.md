@@ -1,5 +1,5 @@
 # CSP-Handler
-*A simple web application to send csp reports to a email address*
+*A simple web application to send CSP violation reports to an email address*
 
 
 ### Important 
