@@ -2,33 +2,34 @@ kind: pipeline
 name: default
 
 steps:
-  - name: build
-    image: docker:dind
-    environment:
-      USERNAME:
-        from_secret: registry_username
-      PASSWORD:
-        from_secret: registry_password
-    volumes:
-      - name: dockersock
-        path: /var/run
-    commands:
-      - sleep 5 # give docker enough time to start
-      - docker login -u $USERNAME -p $PASSWORD registry.bn4t.me
-      - docker build --pull -t registry.bn4t.me/bn4t/csp-handler:latest .
-      - docker push registry.bn4t.me/bn4t/csp-handler:latest
-    when:
-      branch:
-        - master
+- name: build
+  image: docker:dind
+  environment:
+    USERNAME:
+      from_secret: registry_username
+    PASSWORD:
+      from_secret: registry_password
+  volumes:
+  - name: dockersock
+    path: /var/run
+  commands:
+  - sleep 10 # give docker enough time to start
+  - docker login -u $USERNAME -p $PASSWORD registry.bn4t.me
+  - docker build --pull -t registry.bn4t.me/bn4t/csp-handler:latest .
+  - docker push registry.bn4t.me/bn4t/csp-handler:latest
+  when:
+    branch:
+    - master
 
 services:
-  - name: docker
-    image: docker:dind
-    privileged: true
-    volumes:
-      - name: dockersock
-        path: /var/run
+- name: docker
+  image: docker:dind
+  privileged: true
+  volumes:
+  - name: dockersock
+    path: /var/run
 
 volumes:
-  - name: dockersock
-    temp: {}
+- name: dockersock
+  temp: {}
+  
