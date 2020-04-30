@@ -18,7 +18,7 @@ Make sure you edit the config located at `/etc/csp-handler/config.toml` before r
 - `-config <config file>` - The location of the config file to use. Defaults to `config.toml` in the working directory.
 
 # Deinstallation
-Run `sudo make uninstall` to uninstall csp-handler. This will remove `/etc/csp-handler` id the directory is empty.
+Run `sudo make uninstall` to uninstall csp-handler. This will remove `/etc/csp-handler` if the directory is empty.
 
 Run `sudo make uninstall-systemd` to remove the systemd service.
 
