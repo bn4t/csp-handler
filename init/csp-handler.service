@@ -1,0 +1,24 @@
+[Unit]
+Description=Forward csp reports to email
+After=network.target
+StartLimitBurst=5
+StartLimitIntervalSec=10
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/csp-handler -config /etc/csp-handler/config.toml
+ExecStop=/bin/kill -s QUIT $MAINPID
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=true
+ProtectKernelTunables=true
+PrivateDevices=true
+User=csp-handler
+Group=csp-handler
+RestartSec=1
+TimeoutStartSec=1m
+Restart=on-failure
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

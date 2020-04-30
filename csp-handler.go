@@ -20,8 +20,6 @@ package main
 import (
 	"encoding/json"
 	"github.com/labstack/echo/v4"
-	"os"
-	"strconv"
 	"strings"
 )
 
@@ -50,14 +48,8 @@ func handleReport(c echo.Context) error {
 	// if it doesn't exist add it to the map
 	if _, hasValue := RateLimitMap[ip]; hasValue {
 
-		rateLimit, err := strconv.Atoi(os.Getenv("RATE_LIMIT"))
-		if err != nil {
-			println("Invalid RATE_LIMIT value.")
-			return c.String(500, "Internal server error")
-		}
-
 		// check if ratelimit is exceeded
-		if RateLimitMap[ip] < rateLimit {
+		if RateLimitMap[ip] < Config.RateLimit {
 			RateLimitMap[ip]++
 		} else {
 			return c.String(492, "Too many requests")
@@ -69,17 +61,20 @@ func handleReport(c echo.Context) error {
 
 	// deny request if the content-type header is wrong
 	if !strings.Contains(c.Request().Header.Get("Content-Type"), "application/csp-report") {
-		return c.String(400, "Bad Request")
+		return c.String(400, "wrong content-type header")
 	}
 
 	// unmarshal json
 	err := json.NewDecoder(c.Request().Body).Decode(&cspReportJson)
 	if err != nil {
-		return c.String(500, "Internal server error")
+		return c.String(500, "unable to decode csp report")
 	}
 
-	sendCSPMail(domain, cspReportJson.CspReport.DocumentURI, cspReportJson.CspReport.Referrer, cspReportJson.CspReport.ViolatedDirective,
+	err = sendCSPMail(domain, cspReportJson.CspReport.DocumentURI, cspReportJson.CspReport.Referrer, cspReportJson.CspReport.ViolatedDirective,
 		cspReportJson.CspReport.OriginalPolicy, cspReportJson.CspReport.BlockedURI)
+	if err != nil {
+		return c.String(500, "internal server error")
+	}
 
 	return c.NoContent(204)
 }

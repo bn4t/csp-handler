@@ -1,27 +1,33 @@
 # CSP-Handler
-*A simple web application to send CSP violation reports to an email address*
-
+*A simple application to send CSP violation reports to an email address*
 
 ### Important 
-**CSP-Handler needs to be behind a reverse proxy which forwards either the `X-Forwarded-For` or `X-Real-IP` header, else ratelimiting won't work.**
+**CSP-Handler needs to be behind a reverse proxy which forwards either the `X-Forwarded-For` or `X-Real-IP` header, otherwise rate limiting won't work.**
 
+# Installation
+0. Install golang (>=1.14) and GNU make if you don't have them already
+1. Clone the repository: `git clone https://git.bn4t.me/bn4t/csp-handler.git`
+2. Checkout the latest stable tag
+3. Run `make build` to build the csp-handler binary
+4. Run `sudo make install` to install csp-handler on your system. This will create the directory `/etc/csp-handler` (config directory). Additionally the user `csp-handler` will be created.
+5. If you have systemd installed you can run `sudo make install-systemd` to install the systemd service. Run `service csp-handler start` to start the csp-handler service. Csp-handler will automatically run as the `csp-handler` user.
 
+Make sure you edit the config located at `/etc/csp-handler/config.toml` before running the service.
 
-## Setup
+## Command line flags
+- `-config <config file>` - The location of the config file to use. Defaults to `config.toml` in the working directory.
 
+# Deinstallation
+Run `sudo make uninstall` to uninstall csp-handler. This will remove `/etc/csp-handler` id the directory is empty.
 
-1. Clone the repository and enter the directory: `git clone https://git.bn4t.me/bn4t/csp-handler.git
- && cd csp-handler`
-2. Edit the environment variables in `docker-compose.yml`
-3. Build the image and start the container: `docker-compose up --build -d`
+Run `sudo make uninstall-systemd` to remove the systemd service.
 
-## Usage
+# Usage
 Include the `report-uri` directive in your content security policy:
 
 `report-uri https://csp-report.example.com/report-uri/mydomain.com`
 
-Replace `mydomain.com` with the domain on which this content security policy is deployed.
+Replace `csp-report.example.com` with the domain on which csp-report is deployed and `mydomain.com` with the domain on which the *content security policy* is deployed.
 
 ## License
-
 GPLv3
