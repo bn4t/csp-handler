@@ -5,7 +5,7 @@ sender_email = "csp@example.com"
 receiver_email = "alice@example.com"
 
 # SMTP server address in following format: smtp.example.tld:465
-smtp_address = "mail.example.com:465"
+smtp_address = "mail.example.com:587"
 
 # SMTP username
 smtp_username = "me@example.com"
