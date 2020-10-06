@@ -19,9 +19,7 @@ package main
 
 import (
 	"flag"
-	"net/http"
-
-	"github.com/labstack/echo/v4"
+	"log"
 )
 
 func main() {
@@ -30,14 +28,8 @@ func main() {
 
 	readConfig()
 
-	// start the loop to reset the rate limit
-	go rateLimitLoop()
 
-	e := echo.New()
-	e.POST("/report-uri/:domain", handleReport)
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "This is a csp report handler. See https://git.bn4t.me/bn4t/csp-handler for more info.")
-	})
-
-	e.Logger.Fatal(e.Start(Config.BindTo))
+	// TODO: graceful shutdown
+	srv := NewServer()
+	log.Fatal(srv.ListenAndServe())
 }

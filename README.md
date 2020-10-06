@@ -1,11 +1,14 @@
-# CSP-Handler
-*A simple application to send CSP violation reports to an email address*
+# Web-Reports-Handler [WIP]
+Handler that implements endpoints for the [W3C Reporting API](https://w3c.github.io/reporting)
 
-### Important 
-**CSP-Handler needs to be behind a reverse proxy which forwards either the `X-Forwarded-For` or `X-Real-IP` header, otherwise rate limiting won't work.**
+Currently supports following report types:
+
+- csp reports
+- network error logging
+
 
 # Installation
-0. Install golang (>=1.14) and GNU make if you don't have them already
+0. Install golang (>=1.15) and GNU make if you don't have them already
 1. Clone the repository: `git clone https://git.bn4t.me/bn4t/csp-handler.git`
 2. Checkout the latest stable tag
 3. Run `make build` to build the csp-handler binary
